@@ -1,7 +1,7 @@
 use std::io;
 
 fn main() {
-    let mut number = 0;
+    let number: i32;
 
     println!("Please input a number: ");
 
@@ -25,9 +25,17 @@ fn main() {
         };
     }
 
-    if number < 5 {
-        println!("condition was true");
+    if number % 4 == 0 {
+        println!("number is divisible by 4");
+    } else if number % 3 == 0 {
+        println!("number is divisible by 3");
+    } else if number % 2 == 0 {
+        println!("number is divisible by 2");
     } else {
-        println!("condition was false");
+        println!("number is not divisible bt 4, 3 or 2")
     }
+
+    let condition = true;
+    let x = if condition { 5 } else { 6 }; // if else 分支表达式，返回类型必须一致
+    println!("the value of x is {}", x);
 }
