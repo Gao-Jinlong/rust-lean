@@ -69,7 +69,7 @@ fn main() {
     // 不可变引用可以存在多个，但是不可变引用不能和可变引用同时存在
 
     println!("{} and {}", r1, r2);
-    // 引用声明的作用于从声明的地方开始一直持续到最后一次使用为止。
+    // 引用声明的作用域从声明的地方开始一直持续到最后一次使用为止。
 
     let r3 = &mut s; // 这里是可以的，因为 r1 和 r2 的作用域已经结束了
     println!("r3 = {}", r3);
@@ -78,9 +78,9 @@ fn main() {
     println!("dangle s = {}", s);
 
     // slice
-    let s = String::from("hello world");
+    let mut s = String::from("hello world");
     let word = first_word(&s);
-    // s.clear(); 这里会报错，因为 first_word 返回的是一个字符串的切片，而 s.clear() 会清空整个字符串，这样就会导致 word 指向的字符串的内容发生变化，这是不允许的
+    // s.clear(); //这里会报错，因为 first_word 返回的是一个字符串的切片，而 s.clear() 会清空整个字符串，这样就会导致 word 指向的字符串的内容发生变化，这是不允许的
     println!("the first word is: {word}")
 }
 
@@ -125,9 +125,9 @@ fn dangle() -> String {
     s
 }
 
-fn first_word(s: &String) -> &str {
+fn first_word(s: &str) -> &str {
     let bytes = s.as_bytes();
-    // 通过 slice 方法获取字符串的引用切片
+
     for (i, &item) in bytes.iter().enumerate() {
         if item == b' ' {
             return &s[0..i];
