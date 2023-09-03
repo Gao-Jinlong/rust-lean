@@ -2,7 +2,9 @@
 name = "my_rust"
 version = "0.1.0"
 edition = "2021"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.release]
+# 在 release 模式中程序 panic 终止后直接退出，不会清理内存堆栈，需要操作系统来清理。可以缩小二进制文件体积
+# panic="abort"
 
 [dependencies]
