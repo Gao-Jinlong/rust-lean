@@ -1,6 +1,7 @@
 use std::error::Error;
 
 mod guess_game;
+mod my_generic;
 mod my_map;
 mod my_panic;
 mod my_result;
@@ -33,6 +34,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("----------------");
 
     guess_game::main();
+
+    println!("----------------");
+
+    my_generic::main();
 
     Ok(())
 }
