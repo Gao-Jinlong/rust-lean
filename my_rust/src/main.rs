@@ -1,3 +1,4 @@
+use my_trait::{Summary, Tweet};
 use std::error::Error;
 
 mod guess_game;
@@ -6,6 +7,7 @@ mod my_map;
 mod my_panic;
 mod my_result;
 mod my_string;
+mod my_trait;
 mod my_vector;
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -38,6 +40,19 @@ fn main() -> Result<(), Box<dyn Error>> {
     println!("----------------");
 
     my_generic::main();
+
+    println!("----------------");
+
+    my_trait::main();
+
+    let tweet = Tweet {
+        username: String::from("Ginlon in main"),
+        content: String::from("Hello, world!"),
+        reply: false,
+        retweet: false,
+    };
+
+    println!("1 new tweet: {}", tweet.summarize());
 
     Ok(())
 }
