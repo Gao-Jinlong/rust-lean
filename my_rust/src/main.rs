@@ -3,6 +3,7 @@ use std::error::Error;
 
 mod guess_game;
 mod my_generic;
+mod my_lifetime;
 mod my_map;
 mod my_panic;
 mod my_result;
@@ -53,6 +54,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     };
 
     println!("1 new tweet: {}", tweet.summarize());
+
+    println!("----------------");
+
+    my_trait::main();
 
     Ok(())
 }
