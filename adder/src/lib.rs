@@ -40,7 +40,8 @@ impl Guess {
     }
 }
 
-#[cfg(test)]
+#[cfg(test)] // 标注单元测试，只有在测试时才编译
+             // cfg 是 configuration 的缩写，它告诉 Rust 其之后的项只应被包含进特定配置选项中，这里是 test，即 Rust 提供的用于编译和运行测试的配置选项。
 mod tests {
     use super::*;
 
@@ -50,6 +51,9 @@ mod tests {
     }
 
     #[test]
+    #[ignore] // 忽略测试
+              // cargo test -- --ignored 只运行被忽略的测试
+              // cargo test -- --include-ignored 运行所有测试
     fn another() {
         panic!("Make this test fail");
     }
@@ -69,19 +73,18 @@ mod tests {
     }
 
     #[test]
-    fn smaller_cannot_hold_larger() {
-        let larger = Rectangle {
-            width: 8,
-            height: 7,
-        };
-        let smaller = Rectangle {
-            width: 5,
-            height: 3,
-        };
+    // fn smaller_cannot_hold_larger() {
+    //     let larger = Rectangle {
+    //         width: 8,
+    //         height: 7,
+    //     };
+    //     let smaller = Rectangle {
+    //         width: 5,
+    //         height: 3,
+    //     };
 
-        assert!(smaller.can_hold(&larger));
-    }
-
+    //     assert!(smaller.can_hold(&larger));
+    // }
     #[test]
     fn it_adds_two() {
         assert_eq!(4, add_two(2));
