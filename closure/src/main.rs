@@ -1,3 +1,7 @@
+use std::thread;
+
+mod my_iterator;
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
@@ -32,6 +36,12 @@ impl Inventory {
     }
 }
 
+#[derive(Debug)]
+struct Rectangle {
+    width: i32,
+    height: i32,
+}
+
 fn main() {
     let store = Inventory {
         shirts: vec![ShirtColor::Red, ShirtColor::Blue, ShirtColor::Blue],
@@ -50,4 +60,60 @@ fn main() {
         "The user with preference {:?} gets {:?}",
         user_pref2, giveaway2
     );
+
+    let mut list = vec![1, 2, 3];
+    println!("Before defining closure {:?}", list);
+
+    let mut borrows_mutably = || list.push(7);
+
+    borrows_mutably();
+    println!("After calling closure {:?}", list);
+
+    let list = [1, 2, 3];
+    println!("Before defining closure: {:?}", list);
+
+    thread::spawn(move || println!("From thread: {:?}", list))
+        .join()
+        .unwrap();
+
+    let mut list = [
+        Rectangle {
+            width: 10,
+            height: 1,
+        },
+        Rectangle {
+            width: 3,
+            height: 5,
+        },
+        Rectangle {
+            width: 7,
+            height: 12,
+        },
+    ];
+
+    // sort_by_key 被定义为接收一个 FnMut 的闭包，这样就可以多次调用这个 FnMut 闭包，而不是只调用一次。
+    list.sort_by_key(|r| r.width);
+    println!("{:#?}", list);
+
+    // FnOnce 闭包
+    let mut sort_operations = vec![];
+    let value = String::from("by key called");
+
+    list.sort_by_key(|r| {
+        // 如果使用下面的代码，会报错，因为 value 已经被 move 了
+        // 这个闭包只能被调用一次
+        // sort_operations.push(value);
+        sort_operations.push(value.clone());
+        r.width
+    });
+    println!("{:#?}", list);
+
+    let mut num_sort_operations = 0;
+    list.sort_by_key(|r| {
+        num_sort_operations += 1;
+        r.width
+    });
+    println!("{:#?}, sorted in {num_sort_operations} operations", list);
+
+    my_iterator::main();
 }
