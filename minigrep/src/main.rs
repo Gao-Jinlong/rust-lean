@@ -1,7 +1,9 @@
 use std::env;
 use std::process;
 
-use minigrep::Config;
+use lib::Config;
+
+mod lib;
 
 fn main() {
     let config = Config::build(env::args()).unwrap_or_else(|err| {
@@ -10,7 +12,7 @@ fn main() {
     });
 
     // 使用 if 来检查 run 是否返回一个 Err 值
-    if let Err(e) = minigrep::run(config) {
+    if let Err(e) = lib::run(config) {
         eprintln!("Application error: {e}");
         process::exit(1);
     };
