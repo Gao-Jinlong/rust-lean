@@ -1,3 +1,5 @@
+//! # 注释包含项
+//! 这通常用于 crate 根文件（通常是 src/lib.rs）或模块的根文件为 crate 或模块整体提供文档。
 use std::env;
 use std::error::Error;
 use std::fs;
@@ -30,7 +32,9 @@ impl Config {
         })
     }
 }
-
+/// # 文档注释
+/// 可显示在 cargo doc --open 生成的文档中
+/// 支持 markdown 语法
 pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let contents = fs::read_to_string(config.file_path)?;
 
