@@ -1,10 +1,11 @@
 use std::env;
 use std::process;
 use std::fs;
+use std::error::Error;
 
-use lib::Config;
+// use lib::Config;
 
-mod lib;
+// mod lib;
 
 // fn main() {
 //     let config = Config::build(env::args()).unwrap_or_else(|err| {
@@ -21,28 +22,53 @@ mod lib;
 
 fn main(){
 
-    let args: Vac<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
 
-    let config = parse_config(&args);
+    // unwrap_or_else 用于处理 Result 的 Ok 和 Err 两种情况
+    let config = Config::build(&args).unwrap_or_else(|err|{
+        println!("Problem parsing arguments: {err}");
+        process::exit(1);
+    });
 
     println!("Searching for {}",config.query);
     println!("In file {}",config.file_path);
 
-    let contents = fs::read_to_string(config.file_path)
-        .expect("Should have been able to read the file");
+
+    // run(config).unwrap_or_else(|err|{
+    //     println!("Application error: {err}");
+    //     process::exit(1);
+    // })
+    
+    // if let 控制流 用于处理只关心一个分支的情况
+    if let Err(e) = run(config) {
+        println!("Application error: {e}");
+        process::exit(1);
+    };
+
+ 
+} 
+
+fn run(config:Config)-> Result<(),Box<dyn Error>>{
+    let contents = fs::read_to_string(config.file_path)?;
 
     println!("With text:\n{contents}");
-} 
+
+    Ok(())
+}
 
 struct Config{
     query:String,
     file_path:String,
 }
+impl Config {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
 
-fn parse_config(args:&[String]) -> (&str, &str){
-    // TODO: 目前使用 clone() 方法来复制字符串，可以避免所有权问题，但并不是性能的最优解
-    let query = &args[1].clone();
-    let file_path =&args[2].clone();
+        let query = args[1].clone();
+        let file_path = args[2].clone();
 
-    Config{ query, file_path}
+        Ok(Config { query, file_path })
+    }
 }
