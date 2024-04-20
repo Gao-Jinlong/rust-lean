@@ -27,7 +27,7 @@ fn main() {
 
     // unwrap_or_else 用于处理 Result 的 Ok 和 Err 两种情况
     let config = Config::build(&args).unwrap_or_else(|err| {
-        println!("Problem parsing arguments: {err}");
+        eprintln!("Problem parsing arguments: {err}");
         process::exit(1);
     });
 
@@ -41,7 +41,8 @@ fn main() {
 
     // if let 控制流 用于处理只关心一个分支的情况
     if let Err(e) = lib::run(config) {
-        println!("Application error: {e}");
+        // eprintln! 宏类似 println!，但是输出到 stderr 而不是 stdout，使用 cargo run > output.txt 将正常输出写入文件，而错误信息仍然会显示在终端上
+        eprintln!("Application error: {e}");
         process::exit(1);
     };
 }
