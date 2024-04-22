@@ -118,6 +118,8 @@
 //     my_iterator::main();
 // }
 
+mod my_iterator;
+
 #[derive(Debug, PartialEq, Copy, Clone)]
 enum ShirtColor {
     Red,
@@ -168,4 +170,6 @@ fn main() {
         "The user with preference {:?} gets {:?}",
         user_pref2, giveaway2
     );
+
+    my_iterator::main();
 }
