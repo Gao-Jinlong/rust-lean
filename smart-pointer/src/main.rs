@@ -51,6 +51,20 @@ fn main() {
     // 当 T: Deref<Target=U> 时从 &T 到 &U。
     // 当 T: DerefMut<Target=U> 时从 &mut T 到 &mut U。
     // 当 T: Deref<Target=U> 时从 &mut T 到 &U。
+
+    println!("=========================================");
+
+    // Drop trait
+    let c = CustomSmartPointer {
+        data: String::from("my stuff"),
+    };
+    // c.drop(); // rust 不允许显式调用 Drop trait 的 drop 方法
+    drop(c); // 使用标准库中的 drop 函数来调用 Drop trait 的 drop 方法提前释放资源
+    let d = CustomSmartPointer {
+        data: String::from("other stuff"),
+    };
+
+    println!("CustomSmartPointer created.");
 }
 
 struct MyBox<T>(T);
@@ -69,4 +83,14 @@ impl<T> Deref for MyBox<T> {
 
 fn hello(name: &str) {
     println!("Hello, {}!", name);
+}
+
+// -----------------
+struct CustomSmartPointer {
+    data: String,
+}
+impl Drop for CustomSmartPointer {
+    fn drop(&mut self) {
+        println!("Dropping CustommartPointer with data `{}`!", self.data);
+    }
 }
