@@ -4,8 +4,14 @@ enum List {
     Cons(i32, Box<List>),
     Nil,
 }
+enum List2 {
+    Cons(i32, Rc<List2>),
+    Nil,
+}
 
+mod lib;
 use crate::List::{Cons, Nil};
+use std::rc::Rc;
 
 fn main() {
     // let list = Cons(1, Cons(2, Cons(3, Nil))); // rust 编译器无法计算出这个递归定义的类型的大小，因此会报错。
@@ -65,6 +71,31 @@ fn main() {
     };
 
     println!("CustomSmartPointer created.");
+
+    println!("=========================================");
+    // Rc<T> 引用计数智能指针
+    let a = Cons(5, Box::new(Cons(10, Box::new(Nil))));
+    // let b = Cons(3, Box::new(a)); // a 的所有权被转移给了 b
+    // let c = Cons(4, Box::new(a)); // 编译器会报错
+
+    // 使用 Rc<T> 来解决这个问题
+    let a = Rc::new(List2::Cons(
+        5,
+        Rc::new(List2::Cons(10, Rc::new(List2::Nil))),
+    ));
+    let b = List2::Cons(3, Rc::clone(&a));
+    println!("count after b created: {}", Rc::strong_count(&a));
+    {
+        // let c = Cons(4, a.clone()); // 也可以使用 clone 方法来实现 Rc<T> 的克隆，不会像深复制那样复制所有数据，而只会增加引用计数，但为了区分其他类型的 clone 方法，还是推荐使用 Rc::clone 函数
+        let c = List2::Cons(4, Rc::clone(&a));
+        println!("count after c created: {}", Rc::strong_count(&a));
+    }
+    println!("count after c goes out of scope: {}", Rc::strong_count(&a));
+
+    // RefCell<T> 内部可变性
+    println!("=========================================");
+
+    lib::main();
 }
 
 struct MyBox<T>(T);
