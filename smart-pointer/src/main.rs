@@ -10,6 +10,7 @@ enum List2 {
 }
 
 mod lib;
+mod reference_loop;
 use crate::List::{Cons, Nil};
 use std::rc::Rc;
 
@@ -96,6 +97,14 @@ fn main() {
     println!("=========================================");
 
     lib::main();
+
+    println!("=========================================");
+    reference_loop::main();
+
+    println!("=========================================");
+    reference_loop::main2();
+
+    println!("=========================================");
 }
 
 struct MyBox<T>(T);
