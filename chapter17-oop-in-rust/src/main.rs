@@ -1,8 +1,10 @@
 mod blog;
+mod blog_v2;
 mod gui;
 
 use crate::gui::{Button, Screen, SelectBox};
 use blog::Post;
+use blog_v2::Post as PostV2;
 
 fn main() {
     println!("Hello, world!");
@@ -34,10 +36,13 @@ fn main() {
     screen.run();
 
     println!("==============================");
-    blogMain();
+    blog_main();
+
+    println!("==============================");
+    blog_v2_main();
 }
 
-fn blogMain() {
+fn blog_main() {
     let mut post = Post::new();
 
     post.add_text("I ate a salad for lunch today");
@@ -69,4 +74,16 @@ fn blogMain() {
         "I ate a salad for lunch today, and it was delicious",
         post.content()
     );
+}
+
+fn blog_v2_main() {
+    let mut post = PostV2::new();
+
+    post.add_text("I ate a salad for lunch today");
+
+    let post = post.request_review();
+
+    let post = post.approve();
+
+    assert_eq!("I ate a salad for lunch today", post.content());
 }
