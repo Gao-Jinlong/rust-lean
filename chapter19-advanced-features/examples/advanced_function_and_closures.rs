@@ -22,14 +22,14 @@ fn main() {
     let list_of_strings: Vec<String> = list_of_numbers.iter().map(ToString::to_string).collect(); // 使用函数指针
 
     println!("{:?}", list_of_strings);
-    
+
     // 每一个我们定义的枚举成员的名字都是一个构建枚举的实例的函数，这意味着我们可以使用这些构造函数作为实现了闭包 trait 的函数指针
     enum Status {
-      Value(32),
-      Stop,
+        Value(i32),
+        Stop,
     }
 
-    let list_of_statuses:Vec<Status> = (0u32..20).map(Status::Value).collect();
+    let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
 
     // 返回闭包
     // 闭包表现为 trait (Fn, FnMut, FnOnce) ，这意味着不能直接返回闭包
