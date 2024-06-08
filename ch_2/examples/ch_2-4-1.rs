@@ -80,6 +80,31 @@ fn main() {
 
     let s = format!("{} {}", s1, s2); // format! 宏类似于 println!，但是不会打印，而是返回一个 String
     print!("format: {}\n", s);
+
+    let long_string = "String literals
+                        can span multiple lines.
+                        The linebreak and indentation here ->\
+                        <- can be escaped too!";
+
+    println!("{}", long_string);
+
+    println!("{}", "hello \\x52\\x75\\x73\\x74");
+    let raw_str = r"Escapes don't work here: \x3F \u{211D}"; // r"..." 表示原始字符串，不会转义
+    println!("{}", raw_str);
+
+    let raw_str = r#"And then I said: "There is no escape!""#; // r#"..."# 如果字符串中包含 "，可以使用这种方式
+    println!("{}", raw_str);
+    let raw_str = r###"No escapes here"# "##"either: \x3F \u{211D}"###; // r###"..."### 可以使用多个 # 来消除歧义
+    println!("{}", raw_str);
+
+    // 操作 UTF-8 字符串
+    for c in "नमस्ते".chars() {
+        print!("{} ", c);
+    }
+
+    for c in "नमस्ते".bytes() {
+        print!("{} ", c);
+    }
 }
 
 fn first_word(s: &String) -> &str {
