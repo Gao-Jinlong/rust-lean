@@ -67,5 +67,5 @@ fn main() {
     print!("user: {:#?}\n", user);
     // {:?} 和 {:#?} 使用 Debug trait 输出 {} 使用 Display trait 输出
 
-    dbg!(user); // 使用 dbg! 宏打印结构体
+    dbg!()
 }
