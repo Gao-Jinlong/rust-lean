@@ -63,6 +63,38 @@ where
     println!("Breaking news! {}", item.summarize());
 }
 
+// 使用特征约束有条件的实现方法或特征
+struct Pair<T> {
+    x: T,
+    y: T,
+}
+impl<T> Pair<T> {
+    fn new(x: T, y: T) -> Self {
+        Self { x, y }
+    }
+}
+// 只有实现了 Display 和 PartialOrd 特征的类型才能调用 cmp_display 方法
+impl<T: Display + PartialOrd> Pair<T> {
+    fn cmp_display(&self) {
+        if self.x >= self.y {
+            println!("The largest member is x = {}", self.x);
+        } else {
+            println!("The largest member is y = {}", self.y);
+        }
+    }
+}
+
+// 函数返回 impl Trait
+// 这种方式只能返回一个具体类型，不能返回两个不同的类型
+// 可以使用枚举合并多个类型，但这要求在编写代码时就需要知道所有可能的类型
+// 可以使用 特征对象 来解决动态不同类型的问题，见 ch_2-8-3.rs
+fn returns_summarize() -> impl Summary {
+    Weibo {
+        username: String::from("Rust"),
+        content: String::from("Rust 是一门系统编程语言"),
+    }
+}
+
 fn main() {
     let post = Post {
         title: "Rust 语言简介".to_string(),
@@ -78,4 +110,22 @@ fn main() {
 
     notify(&post);
     notify(&weibo);
+
+    let pair = Pair::new(1, 2);
+    pair.cmp_display();
+
+    let s = returns_summarize();
+    println!("{}", s.summarize());
+
+    // TryInto
+    // 使用 trait 方法时，需要将特征引入当前作用域
+    // TryInto 已经通过 std::prelude 模块引入，所以可以直接使用
+    let a: i32 = 10;
+    let b: u16 = 100;
+
+    let b_ = b.try_into().unwrap();
+
+    if a < b_ {
+        println!("Ten is less than one hundred.")
+    }
 }
